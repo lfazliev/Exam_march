@@ -1,4 +1,4 @@
-﻿#include <iostream>
+﻿/*#include <iostream>
 #include <string>
 #include <vector>
 #include <fstream>
@@ -6,9 +6,9 @@
 #include <windows.h>
 class slova//класс слов, есть переменные для простых, средних, сложно
 {
-	int choose;
-	std::string text_sum, buf, word;
-	std::ifstream text;
+	int pol;//Переменная для цикла
+	std::string text_sum, buf, word;//текст, буфер, слово
+	std::ifstream text;//Файл
 public:
 	std::vector<std::string> low, mid, har; //Векторы со словами разной сложности
 	slova()								// элемент вектора для каждого слова
@@ -18,7 +18,7 @@ public:
 		{
 			while (!text.eof())
 			{
-				std::getline(text, buf);
+				std::getline(text, buf);//Через буфер записываем из файла в стринг
 				text_sum = text_sum + '\n' + buf;
 			}
 			text.close();
@@ -36,10 +36,10 @@ public:
 				}
 				else
 				{
-					choose = 1;
+					pol = 1;
 					if (text_sum.at(i) == '/')//Начало слова запуск цикла
 					{
-						while (choose != 0)
+						while (pol != 0)
 						{
 							i = i++;
 							if (text_sum.at(i) != '/')//Записываем пока не найдём окончаение слова 
@@ -48,7 +48,7 @@ public:
 							}
 							else
 							{
-								choose = 0;
+								pol = 0;
 								if (word.size() <= 5)//Присваеваем сложность по кол-ву букв
 								{
 									low.push_back(word);
@@ -80,9 +80,24 @@ void ShowMenu(int iItem)//Меню
 	std::cout << "1 - Начать игру\n";
 	if (iItem == 2) std::cout << "";
 	else std::cout << "	";
-	std::cout << "2 - Выйти\n";
+	std::cout << "2 - Информация\n";
+	if (iItem == 3) std::cout << "";
+	else std::cout << "	";
+	std::cout << "3 - Выход\n";
 }
-void ShowMenuTwo(int iItem)//Меню выбора сложности
+void ShowMenuTwo(int iItem)//Меню выбора информации
+{
+	if (iItem == 1) std::cout << "";
+	else std::cout << "	";
+	std::cout << "1 - Автор\n";
+	if (iItem == 2) std::cout << "";
+	else std::cout << "	";
+	std::cout << "2 - Правила игры\n";
+	if (iItem == 3) std::cout << "";
+	else std::cout << "	";
+	std::cout << "3 - Назад\n";
+}
+void ShowMenuThree(int iItem)//Меню выбора сложности
 {
 	if (iItem == 1) std::cout << "";
 	else std::cout << "	";
@@ -97,7 +112,7 @@ void ShowMenuTwo(int iItem)//Меню выбора сложности
 	else std::cout << "	";
 	std::cout << "4 - Назад\n";
 }
-void ShowMenuThree(int xItem, int yItem)//отображение меню выбора букв
+void ShowChooseWord(int xItem, int yItem)//отображение меню выбора букв
 {
 	if (xItem == 1 and yItem == 1) std::cout << "\t&";
 	else std::cout << "	";
@@ -226,7 +241,7 @@ void game(int& y, int& x, int z)
 	{
 		std::cout << black << "\nПопыток " << popitcy<< "\n";
 		std::cout << "Выберите буву\n";
-		ShowMenuThree(x, y);
+		ShowChooseWord(x, y);
 		choosa = _getch();
 		system("cls");
 		switch (choosa)
@@ -447,12 +462,16 @@ void game(int& y, int& x, int z)
 		}
 	} while (choosa != 0);
 }
-void primenenie(int& z)
+int main()
 {
-	int choose, x,y,o=1;
+	srand(time(0));
+	system("chcp 1251");
+	int choose, x, y, o = 1, z = 1, f = 1; *//*choose - сюда записываем клавиши через getch,
+									x, y - позиции при выборе букв в игре, o - позиция для второго меню,
+									z - позиция в главном меню, f позиция в меню инфо*//*
 	do
 	{
-		ShowMenu(z);
+		ShowMenu(z);//Выводим главное меню с положением z
 		choose = _getch();
 		system("cls");
 		switch (choose)
@@ -464,7 +483,7 @@ void primenenie(int& z)
 		}break;
 		case 80:
 		{
-			if (z != 2)
+			if (z != 3)
 				z++;
 		}break;
 		case 13:
@@ -475,7 +494,7 @@ void primenenie(int& z)
 			{
 				do
 				{
-					ShowMenuTwo(o);
+					ShowMenuThree(o);
 					choose = _getch();
 					system("cls");
 					switch (choose)
@@ -522,9 +541,56 @@ void primenenie(int& z)
 						}
 					}break;
 					}
-				}while (choose != 0);
+				} while (choose != 0);
 				break;
 			case 2:
+			{
+				do
+				{
+					ShowMenuTwo(f);
+					choose = _getch();
+					system("cls");
+					switch (choose)
+					{
+					case 72:
+					{
+						if (f != 1)
+						{
+							f--;
+						}
+					}break;
+					case 80:
+					{
+						if (f != 3)
+						{
+							f++;
+						}
+					}break;
+					case 13:
+					{
+						z = 1;
+						switch (f)
+						{
+						case 1:
+						{
+							std::cout << "\nФазлиев Ленар Рамилевич, г.Сочи\n";
+						}break;
+						case 2:
+						{
+							std::cout << "\nКомпьютер загадывает слово, изначально все буквы слова неизвестны, игрок предлагает букву, которая может входить в это слово.\nЕсли такая буква есть в слове, то соответствующими этой букве место в слове раскрывается.\n Если такой буквы нет, то буква засчитывается в ошибку. \nИгрок продолжает отгадывать буквы до тех пор, пока не отгадает всё слово.\n Если игроку удаётся угадать слово, он выигрывает.\n";
+						}break;
+						case 3:
+						{
+							choose = 0;
+							z, o = 1;
+						}break;
+						}
+					}break;
+					}
+				} while (choose != 0);
+				break;
+			}break;
+			case 3:
 			{
 				z = 0;
 			}break;
@@ -532,12 +598,5 @@ void primenenie(int& z)
 			}
 		}
 		}
-	}while (z != 0);
-}
-int main()
-{
-	srand(time(0));
-	int choose = 1, attempts = 0, z = 1;
-	system("chcp 1251");
-	primenenie(z);
-}
+	} while (z != 0);
+}*/

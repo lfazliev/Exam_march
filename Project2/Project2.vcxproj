@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="codirovschik.cpp" />
+    <ClCompile Include="financy.cpp" />
     <ClCompile Include="Vischelica.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
