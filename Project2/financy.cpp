@@ -4,6 +4,75 @@
 #include <fstream>
 #include <conio.h>
 #include <windows.h>
+class calendar
+{
+	int month, year, day = 0;
+	std::string monthsList[12] = { "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" };
+	int mDays[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+	int days;
+	int current;
+	int t[12] = { 6, 2, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4 };
+	int y = year % 100;
+public:
+	calendar()
+	{
+		std::cout << "Введите номер месяца: ";
+		std::cin >> month;
+		while (month < 1 || month > 12)
+		{
+			std::cout << "Неверно введён месяц. Введите номер месяца от 1 до 12, где \n 1 - январь \n 12 - декабрь";
+			std::cin >> month;
+		}
+		std::cout << "Введите номер года от 1900 до 2035: ";
+		std::cin >> year;
+		while (year < 1900 || year > 2035)
+		{
+			std::cout << "Неверно введён год. Введите число от 1900 до 2035:\n";
+			std::cin >> year;
+		}
+		current = y / 12 + y % 12 + y % 12 / 4 + t[month - 1] +
+			(20 - year / 100);
+		if ((year % 400 == 0 || (year % 4 == 0 && year % 100 != 0)) && month <= 2)
+			current--;
+		current = current % 7;
+		if (month == 2)
+		{   // 1 - это февраль месяц, так как счёт начинается с 0.
+			if (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0))
+			{
+				days = 29; // Если високосный
+			}
+			else
+			{
+				days = mDays[month - 1];
+			}
+		}
+		else
+		{
+			days = mDays[month - 1];
+		}
+		std::cout << "\nВведи день ";
+		std::cin >> day;
+		while (day > days || day <= 0)
+		{
+			std::cout << "\nНеверно Введи день ";
+			std::cin >> day;
+		}
+		/*day += 20;
+		if (day > days)
+		{
+			day = day - days;
+			if (month != 12)
+			{
+				month++;
+			}
+			else
+			{
+				year++;
+				month = 1;
+			}
+		}*/
+	}
+};
 void showmenutrat(int iItem)
 {
 	if (iItem == 1) std::cout << "";
@@ -22,17 +91,33 @@ void showmenutrat(int iItem)
 	else std::cout << "	";
 	std::cout << "5 - Развлечения\n";
 }
-class expenses
+class category;
+class operaci
 {
-	std::vector<int> transport, food, supermarkets, health, entertainments;
-	int mouth, day;
+	calendar date;
+	int sum;
 public:
-	void add(int sum)
+	operaci(int gg)
 	{
+		sum = gg;
+	}
+	void add(category* cat, operaci& op)
+	{
+		cat.add(op);
+	}
+
+};
+class category{};
+operaci::operaci() { cat = new category; }
+class category
+{
+	std::vector<operaci> transport, food, supermarkets, health, entertainments;
+public:
+	void add(operaci op)
+	{
+
 		int choose = 1, x = 1;
-		std::cout << "Введите дату операции: месяц, день(в формате 10 26)";
-		std::cin >> mouth;
-		std::cin >> day;
+		
 		do
 		{
 			system("cls");
@@ -53,21 +138,23 @@ public:
 			case 13:
 			{
 				if (x == 1)
-					transport.push_back(sum);
+					transport.push_back(op);
 				if (x == 2)
-					food.push_back(sum);
+					food.push_back(op);
 				if (x == 3)
-					supermarkets.push_back(sum);
+					supermarkets.push_back(op);
 				if (x == 4)
-					health.push_back(sum);
+					health.push_back(op);
 				if (x == 5)
-					entertainments.push_back(sum);
+					entertainments.push_back(op);
 				choose = 0;
 			}break;
 			}
 		} while (choose != 0);
 	}
 };
+
+
 class walet
 {
 	int balance = 0;
@@ -89,7 +176,7 @@ public:
 	{
 		balance = balanc;
 	}
-	void traty()
+	void traty(std::vector<operaci>& op)
 	{
 		int sum;
 		std::cout << "Каковы траты? - ";
@@ -101,7 +188,7 @@ public:
 		}
 		if (sum <= balance)
 		{
-			trata.add(sum);
+			op.push_back(sum);
 			balance =- sum;
 		}
 		else
@@ -157,7 +244,7 @@ void ShowMenuThree(int iItem)
 	else std::cout << " ";
 	std::cout << "4 - Назад\n";
 }
-void primenenie(int x, std::vector<walet>& walet)
+void primenenie(int x, std::vector<walet>& walet, std::vector<operaci>&op, category &cat)
 {
 	switch (x)
 	{
@@ -272,7 +359,7 @@ void primenenie(int x, std::vector<walet>& walet)
 										choose = 0;
 									}
 									else {
-										walet.at(x).traty();
+										walet.at(x).traty(op);
 										choose = 0;
 									}
 								}
@@ -297,6 +384,8 @@ int main()
 	system("chcp 1251");
 	int choose, x = 1;
 	std::vector<walet> walet;
+	std::vector<operaci>op;
+	category cat;
 	do
 	{
 		system("cls");
@@ -321,7 +410,7 @@ int main()
 				return 0;
 			}
 			else
-			primenenie(x, walet);
+			primenenie(x, walet,op,cat);
 		}break;
 		}
 	} while (x != 0);

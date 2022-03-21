@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="codirovschik.cpp" />
     <ClCompile Include="financy.cpp" />
+    <ClCompile Include="Source.cpp" />
     <ClCompile Include="Vischelica.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
