@@ -901,7 +901,10 @@ void primenenie(int x, walet& waleta)
 												}
 												else
 												{
-													top.at(2) = lists.at(i);
+													if (lists.at(i).getCost() >= top.at(2).getCost())
+													{
+														top.at(2) = lists.at(i);
+													}	
 												}
 											}
 										}
@@ -966,6 +969,7 @@ void primenenie(int x, walet& waleta)
 								}
 								if (choose != 0)
 								{
+									choose = 0;
 									for (int i = 0; i < top.size(); i++)
 									{
 										top.at(i) = 0;
@@ -1008,7 +1012,10 @@ void primenenie(int x, walet& waleta)
 												}
 												else
 												{
-													top.at(2) = i;
+													if (topcat.at(i) >= topcat.at(top.at(2)))
+													{
+														top.at(2) = i;
+													}
 												}
 											}
 										}
@@ -1025,7 +1032,6 @@ void primenenie(int x, walet& waleta)
 									}
 								}
 								a = 1;
-								choose = 0;
 							}break;
 							}
 						} while (choose != 0);
