@@ -29,7 +29,6 @@ public:
 			}
 			for (int i = 0; i < text_sum.size() - 1; i++)
 			{
-
 				if (text_sum.at(i) == '\n')//Пропускаем переход в начала файла
 				{
 					i = i++;
@@ -250,7 +249,6 @@ void game(int& y, int& x, int z)
 		{
 			if (y != 1)
 				y--;
-			
 		}break;
 		case 80:
 		{
@@ -271,7 +269,6 @@ void game(int& y, int& x, int z)
 		{
 			if (x != 1)
 				x--;
-			
 		}break;
 		case 77:
 		{
@@ -441,7 +438,6 @@ void game(int& y, int& x, int z)
 			int schet = 0;
 			for (int i = 0; i < black.size(); i++)
 			{
-				
 				if (black.at(i) != '@')
 				{
 					schet++;
@@ -457,7 +453,6 @@ void game(int& y, int& x, int z)
 				std::cout << "Время " << (int)((T2 - T1) / 1000) << " секунд\n\n";
 				system("pause");
 			}
-
 		}break;
 		}
 	} while (choosa != 0);

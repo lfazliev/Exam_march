@@ -13,7 +13,16 @@ void ShowMenuTwo(int iItem)//Меню
 	else std::cout << " ";
 	std::cout << "2 - Нет\n";
 }
-void save(std::ofstream &cold, std::string &record)
+void checkaut(int& buf)
+{
+	while (!(std::cin >> buf) || (std::cin.peek() != '\n'))
+	{
+		std::cin.clear();
+		while (std::cin.get() != '\n');
+		std::cout << "Input error! Repeat please...\n";
+	}
+}
+void save(std::ofstream& cold, std::string& record, std::string naxo)
 {
 	int choose = 1, o = 1;
 	do
@@ -38,11 +47,16 @@ void save(std::ofstream &cold, std::string &record)
 		{
 			if (o == 1)
 			{
+				cold.open(naxo);
 				if (cold.is_open())
 				{
 					cold << record;
 					record.clear();
 					cold.close();
+				}
+				else
+				{
+					std::cout << "\nФайл не открыт\n";
 				}
 			}
 			record.clear();
@@ -50,7 +64,6 @@ void save(std::ofstream &cold, std::string &record)
 			choose = 0, o = 1;
 		}break;
 		}
-
 	} while (choose != 0);
 }
 void showmenutrat(int iItem, std::vector<std::string> cat)
@@ -65,7 +78,7 @@ void showmenutrat(int iItem, std::vector<std::string> cat)
 	if (iItem == i) std::cout << "-";
 	else std::cout << " ";
 	std::cout << "Добавить категорию\n";
-	if (iItem == i+1) std::cout << "-";
+	if (iItem == i + 1) std::cout << "-";
 	else std::cout << " ";
 	std::cout << "Отмена\n";
 }
@@ -185,60 +198,49 @@ public:
 	int& getYear() { return year; }
 	void setYear(const int& num) { year = num; }
 	int& getDays() { return days; }
-	calendar(){}
+	calendar() {}
 	calendar(const calendar& other)
 	{
-		 this->days = other.days;
-		 this->current = other.current;
-		 this->month = other.month;
-		 this->year = other.year;
-		 this->day = other.day;
+		this->days = other.days;
+		this->current = other.current;
+		this->month = other.month;
+		this->year = other.year;
+		this->day = other.day;
 	}
 	void add(int pol)
 	{
 		std::cout << "Введите номер года от 1900 до 2035: ";
-		std::cin >> year;
+		checkaut(year);
 		while (year < 1900 || year > 2035)
 		{
 			std::cout << "Неверно введён год. Введите число от 1900 до 2035:\n";
 			std::cin >> year;
 		}
 		std::cout << "Введите номер месяца: ";
-		std::cin >> month;
+		checkaut(month);
 		while (month < 1 || month > 12)
 		{
 			std::cout << "Неверно введён месяц. Введите номер месяца от 1 до 12, где \n 1 - январь \n 12 - декабрь ";
-			std::cin >> month;
+			checkaut(month);
 		}
 		scet();
-		switch (pol)
+		if(pol == 0 or pol == 1)
 		{
-		case 0:
-		{
-			std::cout << "Введи день ";
-			std::cin >> day;
+			if (pol == 1)
+				std::cout << "Введи день с которого начнётся неделя\n";
+			else
+				std::cout << "Введи день\n";
+			checkaut(day);
 			while (day > days || day <= 0)
 			{
-				std::cout << "\nНеверно Введи день ";
-				std::cin >> day;
+				std::cout << "\nНеверно Введи день с которого начнётся неделя";
+				checkaut(day);
 			}
-		}break;
-		case 1:
-		{
-			std::cout << "Введи день с которого начнётся неделя\n";
-			std::cin >> day;
-			while (day > days || day <= 0)
-			{
-				std::cout << "\nНеверно Введи день ";
-				std::cin >> day;
-			}
-		}break;
-		case 2:
+		}
+		if(pol==2)
 		{
 			day = 1;
-		}break;
 		}
-		
 	}
 	void perasch()
 	{
@@ -272,21 +274,24 @@ public:
 	void setName(const std::string& num) { name = num; }
 	int& getBalance() { return balance; }
 	void setBalance(const int& num) { balance = num; }
-	void add(int a)
+	void addmoney(int &buf)
 	{
-		balance += a;
-	}
-	void addmoney(int buf)
-	{
-		if (buf > 0)
+		checkaut(buf);
+		while (buf <= 0)
 		{
-			balance = balance + buf;
+			std::cout << "Неверно введена сумма. Введите не меньше 0 ";
+			checkaut(buf);
 		}
-		else
-			std::cout << "\nПрикол\n";
+		balance = balance + buf;
 	}
-	void tratim(int A, int&B)
+	void tratim(int &A, int&B)
 	{
+		checkaut(A);
+		while (A <= 0)
+		{
+			std::cout << "Неверно введена сумма. Введите не меньше 0 ";
+			checkaut(A);
+		}
 		if (A <= balance)
 		{
 			balance = balance - A;
@@ -304,7 +309,7 @@ void ShowCard(int iItem, std::vector<card> card)
 	{
 		if (iItem == i) std::cout << "-";
 		else std::cout << " ";
-		std::cout << i+1 << "." << card.at(i).getName() << " - Карта\n";
+		std::cout << i + 1 << "." << card.at(i).getName() << " - Карта\n";
 	}
 	if (iItem == i) std::cout << "-";
 	else std::cout << " ";
@@ -325,9 +330,8 @@ public:
 	{
 		date.add(0);
 		cost = b;
-	
 	}
-	operaci(){}
+	operaci() {}
 	operaci(const operaci& other)
 	{
 		this->cost = other.cost;
@@ -341,7 +345,7 @@ class walet
 	std::vector<operaci> oper;
 	std::vector<std::string> category;
 private:
-	void recrep(calendar dat, int B,int &A, std::string &record)
+	void recrep(calendar dat, int B, int& A, std::string& record)
 	{
 		for (int i = 0; i < oper.size(); i++)
 		{
@@ -387,7 +391,6 @@ private:
 					{
 						list.push_back(oper.at(i));
 					}
-					
 				}
 			}
 		}
@@ -448,22 +451,16 @@ public:
 			{
 				if (o == 1)
 				{
-					int a;
+					int A;
 					std::cout << "Сколько вы хотите положить? - ";
-					while (!(std::cin >> a) || (std::cin.peek() != '\n'))
-					{
-						std::cin.clear();
-						while (std::cin.get() != '\n');
-						std::cout << "Input error! Repeat please...\n";
-					}
-					carda.at(carda.size() - 1).add(a);
+					carda.at(carda.size() - 1).addmoney(A);
 				}
 				o = 0;
 			}break;
 			}
 		} while (o != 0);
 	}
-	void report(int F, std::string record, std::ofstream&cold)
+	void report(int F, std::string record, std::ofstream& cold, std::string naxo)
 	{
 		calendar dat;
 		int A = 0;
@@ -472,16 +469,15 @@ public:
 		case 0:
 		{
 			dat.add(F);
-			recrep(dat, 0,A, record);
+			recrep(dat, 0, A, record);
 			std::cout << record;
-			
 		}break;
 		case 1:
 		{
 			dat.add(F);
 			for (int i = 0; i < 7; i++)
 			{
-				recrep(dat, 0,A, record);
+				recrep(dat, 0, A, record);
 				dat.setDay(dat.getDay() + 1);
 				dat.perasch();
 			}
@@ -490,12 +486,12 @@ public:
 		case 2:
 		{
 			dat.add(F);
-			recrep(dat, 1,A,record);
+			recrep(dat, 1, A, record);
 			std::cout << record;
 		}break;
 		}
 		system("pause");
-		save(cold, record);
+		save(cold, record, naxo);
 	}
 	void topik(std::vector<operaci>& list, int pol)
 	{
@@ -504,20 +500,19 @@ public:
 		{
 		case 0:
 		{
-			dat.add(pol+1);
+			dat.add(pol + 1);
 			for (int i = 0; i < 7; i++)
 			{
-				rectop(dat,pol, list);
+				rectop(dat, pol, list);
 				dat.setDay(dat.getDay() + 1);
 				dat.perasch();
 			}
 		}break;
 		case 1:
 		{
-			dat.add(pol+1);
+			dat.add(pol + 1);
 			rectop(dat, pol, list);
 		}break;
-
 		}
 	}
 };
@@ -533,7 +528,6 @@ void primenenie(int x, walet& waleta)
 	}break;
 	case 2:
 	{
-
 		if (waleta.getCarda().size() != 0)
 		{
 			int choose, o = 0, a = 1;
@@ -578,22 +572,19 @@ void primenenie(int x, walet& waleta)
 							}break;
 							case 13:
 							{
-								
 								switch (a)
 								{
 								case 1:
 								{
-									int buf;
+									int A;
 									std::cout << "На сколько пополнить? - ";
-									std::cin >> buf;
-									waleta.getCarda().at(o).addmoney(buf);
+									waleta.getCarda().at(o).addmoney(A);
 									choosa = 0;
 								}break;
 								case 2:
 								{
-									int A, B = 0, C = 1;
+									int A = 0, B = 0, C = 1;
 									std::cout << "Сколько тратим? - ";
-									std::cin >> A;
 									waleta.getCarda().at(o).tratim(A, B);
 									if (B == 1)
 									{
@@ -601,7 +592,6 @@ void primenenie(int x, walet& waleta)
 										int iltem = 0;
 										do
 										{
-											
 											system("cls");
 											std::cout << "Выберите категорию\n";
 											showmenutrat(iltem, waleta.getCateg());
@@ -622,7 +612,7 @@ void primenenie(int x, walet& waleta)
 											{
 												if (iltem <= waleta.getCateg().size() - 1)
 												{
-													waleta.getOper().at(waleta.getOper().size()-1).setType(iltem);
+													waleta.getOper().at(waleta.getOper().size() - 1).setType(iltem);
 													std::cout << "Операция добавлена\n";
 													choose = 0;
 													system("pause");
@@ -743,17 +733,17 @@ void primenenie(int x, walet& waleta)
 					case 0:
 					{
 						cold.open(naxo);
-						waleta.report(0, record, cold);
+						waleta.report(0, record, cold, naxo);
 					}break;
 					case 1:
 					{
 						cold.open(naxo);
-						waleta.report(1, record, cold);
+						waleta.report(1, record, cold, naxo);
 					}break;
 					case 2:
 					{
 						cold.open(naxo);
-						waleta.report(2, record, cold);
+						waleta.report(2, record, cold, naxo);
 					}break;
 					case 3:
 					{
@@ -774,7 +764,7 @@ void primenenie(int x, walet& waleta)
 		}
 	}break;
 	case 4:
-	 {
+	{
 		int o = 1, choosa;
 		if (waleta.getOper().size() != 0)
 		{
@@ -851,9 +841,7 @@ void primenenie(int x, walet& waleta)
 										record = std::to_string(1) + '.' + std::to_string(lists.at(0).getCost()); waleta.printcat(lists.at(0).getType(), record);
 										std::cout << record;
 										system("pause");
-										cold.open(naxo);
-										save(cold, record);
-
+										save(cold, record, naxo);
 									}
 									if (lists.size() == 2)
 									{
@@ -878,9 +866,7 @@ void primenenie(int x, walet& waleta)
 										}
 										std::cout << record;
 										system("pause");
-										cold.open(naxo);
-										save(cold, record);
-
+										save(cold, record, naxo);
 									}
 									if (lists.size() >= 3)
 									{
@@ -904,20 +890,17 @@ void primenenie(int x, walet& waleta)
 													if (lists.at(i).getCost() >= top.at(2).getCost())
 													{
 														top.at(2) = lists.at(i);
-													}	
+													}
 												}
 											}
 										}
 										for (int i = 0; i < top.size(); i++)
 										{
 											record = record + std::to_string(i + 1) + '.' + std::to_string(top.at(i).getCost()); waleta.printcat(top.at(i).getType(), record);
-
 										}
 										std::cout << record;
 										system("pause");
-										cold.open(naxo);
-										save(cold, record);
-
+										save(cold, record, naxo);
 									}
 								}
 								a = 1;
@@ -991,7 +974,7 @@ void primenenie(int x, walet& waleta)
 										std::cout << record;
 										system("pause");
 										cold.open(naxo);
-										save(cold, record);
+										save(cold, record, naxo);
 									}
 									else
 									{
@@ -1026,9 +1009,7 @@ void primenenie(int x, walet& waleta)
 										}
 										std::cout << record;
 										system("pause");
-										cold.open(naxo);
-										save(cold, record);
-
+										save(cold, record, naxo);
 									}
 								}
 								a = 1;
@@ -1045,7 +1026,7 @@ void primenenie(int x, walet& waleta)
 					choosa = 0;
 				}
 				}
-			}while (choosa != 0);
+			} while (choosa != 0);
 		}
 		else
 		{
@@ -1088,5 +1069,5 @@ int main()
 			x = 1;
 		}break;
 		}
-	}while (choose != 0);
+	} while (choose != 0);
 }
