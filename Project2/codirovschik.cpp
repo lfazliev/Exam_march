@@ -1,4 +1,4 @@
-/*#include <iostream>//Только маленькие буквы, каждое слово выделять /
+/*#include <iostream>//Только маленькие буквы, каждое слово выделять / без пробелов
 #include <string>
 #include <fstream>
 int main()

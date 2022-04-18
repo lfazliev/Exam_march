@@ -1,10 +1,10 @@
-/*#include <iostream> //В 29 строке вводится место для сохранения
+#include <iostream> //В 29 строке вводится место для сохранения
 #include <string>
 #include <vector>
 #include <fstream>
 #include <conio.h>
 #include <algorithm>
-void ShowMenuTwo(int iItem)//Меню
+void ShowMenuTwo(int iItem)
 {
 	if (iItem == 1) std::cout << "-";
 	else std::cout << " ";
@@ -25,10 +25,10 @@ void checkaut(int& buf)
 void save(std::string& record)
 {
 	int choose = 1, o = 1;
-	std::ofstream cold;*/
-	/*std::string naxo = "C:/Users/Ленар/Desktop/File.financi.txt";
-	std::cout << "\nВведите место сохранения";*//*
-	std::cin >> naxo;
+	std::ofstream cold;
+	std::string naxo = "C:/Users/Ленар/Desktop/File.financi.txt";
+	/*std::cout << "\nВведите место сохранения"; //Реализация с вводом клавиатурой
+	std::cin >> naxo;*/
 	do
 	{ 
 		system("cls");
@@ -86,7 +86,7 @@ void showmenutrat(int iItem, std::vector<std::string> cat)
 	else std::cout << " ";
 	std::cout << "Отмена\n";
 }
-void ShowMenu(int iItem)//Меню
+void ShowMenu(int iItem)
 {
 	if (iItem == 1) std::cout << "";
 	else std::cout << "	";
@@ -1014,4 +1014,3 @@ int main()
 		}
 	} while (choose != 0);
 }
-*/
